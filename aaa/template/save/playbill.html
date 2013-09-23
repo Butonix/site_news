@@ -1,0 +1,122 @@
+{% extends 'index.html'%}
+{% load markup %}
+
+{% block content %}
+<td id="content_block_left">
+	<h1><span>Афиша, </span><span>совместно с газетой "Николаев за неделю"</span></h1>
+	<table style="margin-bottom:30px;">
+		<tr>
+			<td class="mk_next_week" align="center"><p><a href="/playbill/{{ prev_week|date:"Y/m/d" }}/">&lt;&lt; Предыдущая неделя</a></p></td>
+			<td width="230" align="center">
+				<table>
+					<tr>
+						<td class="mk_mounth">{{ today|date:"F Y" }}</td>
+					</tr>
+				</table>
+				<table id="mk_calendar" align="center">
+					<tr class="mk_calendar">
+						<td class="mk_calendar_left_on">Пн</td>
+						<td class="mk_calendar_day_on">Вт</td>
+						<td class="mk_calendar_day_on">Ср</td>
+						<td class="mk_calendar_day_on">Чт</td>
+						<td class="mk_calendar_day_on">Пт</td>
+						<td class="mk_calendar_day_on">Сб</td>
+						<td class="mk_calendar_right_on">Вс</td>
+					</tr>
+				</table>
+				<table id="mk_calendar">
+					<tr>
+                        {{calendar|safe}}
+					</tr>
+				</table>
+			</td>
+			<td class="mk_next_week" align="center"><p><a href="/playbill/{{ next_week|date:"Y/m/d" }}/">Следующая неделя &gt;&gt;</a></p></td>
+		</tr>
+	</table>
+
+    {% for type in types %}
+    {% if type.places %}
+    <h3>{{type.name|capfirst}}</h3>
+        <table class="afisha">
+            {% regroup type.places by place as places %}            
+            {% for place in places %}            
+			<tr class="{% cycle 'color_01' 'color_02' %}">
+				<td class="col_01">{% if place.grouper.logo %}<img width="60" height="60" src="{{place.grouper.logo.url}}" alt="" />{% endif %}</td>
+				<td class="col_02"><strong>{{place.grouper.name}}</strong><br/>{{place.grouper.info}}</td>
+				<td class="col_03">
+					<table class="sub_afisha">
+                        {% for event in place.list|dictsortreversed:"add_date" %}
+						<tr>
+							<td class="sub_col_03"><p>{{event.text|markdown}}</p></td>
+						</tr>
+                        {% endfor %}
+					</table>
+				</td>
+			</tr>
+            {% endfor %}
+		</table>
+     {% endif %}
+     {% endfor %}
+     
+     {% if future %}
+     <h3>Скоро</h3>
+        <table class="afisha">
+            {% for event in future %}
+			<tr class="{% cycle 'color_01' 'color_02' %}">                
+				<td class="col_01">
+                    {% if event.thumb %}
+                    <img width="60" height="60" src="{{event.thumb.url}}" alt="" />
+                    {% else%} 
+                        {% if event.place.logo %}
+                            <img width="60" height="60" src="{{event.place.logo.url}}" alt="" />
+                        {% endif %}
+                    {% endif %}
+                </td>
+				<td class="col_02">{{event.place.name}}<br/>{{event.place.info}}</td>
+				<td class="col_03">
+					<table class="sub_afisha">
+						<tr>
+							<td class="sub_col_03"><p>{{event.text|markdown}}</p></td>
+                            {% ifequal event.start_date event.end_date %}
+                            <td class="sub_col_04"><p>{{event.start_date|date:"d/m/Y"}}</p></td>
+                            {% else %}
+                            <td class="sub_col_04"><p>{{event.start_date|date:"d/m/Y"}} - <br>{{event.end_date|date:"d/m/Y"}}</p></td>
+                            {% endifequal %}
+						</tr>
+					</table>
+				</td>
+			</tr>
+            {% endfor %}
+		</table>
+     {% endif %}
+     
+     <!--
+     {% if future %}
+     <h3>Скоро</h3>
+     {% regroup future by place as places %}
+        <table class="afisha">
+            {% for place in places %}
+			<tr>
+				<td class="col_01">{% if place.grouper.logo %}<img width="60" height="60" src="{{place.grouper.logo.url}}" alt="" />{% endif %}</td>
+				<td class="col_02">{{place.grouper.name}}<br/>{{place.grouper.info}}</td>
+				<td class="col_03">
+					<table class="sub_afisha">
+                        {% for event in place.list %}
+						<tr>
+							<td class="sub_col_03"><p>{{event.text|markdown}}</p></td>
+                            {% ifequal event.start_date event.end_date %}
+                            <td class="sub_col_04"><p>{{event.start_date|date:"d/m/Y"}}</p></td>
+                            {% else %}
+                            <td class="sub_col_04"><p>{{event.start_date|date:"d/m/Y"}} - <br>{{event.end_date|date:"d/m/Y"}}</p></td>
+                            {% endifequal %}
+						</tr>
+                        {% endfor %}
+					</table>
+				</td>
+			</tr>
+            {% endfor %}
+		</table>
+     {% endif %}
+     -->
+</td>
+{% endblock %}

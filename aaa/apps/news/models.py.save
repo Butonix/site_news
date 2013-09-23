@@ -1,0 +1,161 @@
+﻿from django.db import models
+from django.contrib.auth.models import User
+from database_products.thumbs import ImageWithThumbsField
+from thumbnail.fields import ThumbField
+
+class Rubrics(models.Model):
+    name = models.CharField(verbose_name=u'Рубрика', max_length=128)
+    date = models.DateTimeField(auto_now=True)
+    slug = models.SlugField(verbose_name=u'Slug')
+    keywords = models.CharField(verbose_name=u'Ключевые слова', max_length=255, blank=True)
+    description = models.TextField(verbose_name=u'Описание', blank=True)
+
+    def __unicode__(self):
+        return self.name
+
+    def get_absolute_url(self):
+        return '/rubric/%s/' % self.slug
+
+    class Meta:
+        verbose_name = "Рубрика"
+        verbose_name_plural = "Рубрики"
+
+class Categories(models.Model):
+    rubric = models.ForeignKey(Rubrics, related_name='category', verbose_name=u'Рубрика')
+    name = models.CharField(verbose_name=u'Категория', max_length=128)
+    date = models.DateTimeField(auto_now=True)
+    slug = models.SlugField(verbose_name=u'Slug')
+    keywords = models.CharField(verbose_name=u'Ключевые слова', max_length=255, blank=True)
+    description = models.TextField(verbose_name=u'Описание', blank=True)
+
+    def __unicode__(self):
+        return self.name
+
+    def get_absolute_url(self):
+        return '/rubric/%s/%s/' % (self.rubric.slug,
+		                           self.slug)
+
+    class Meta:
+        verbose_name = "Категория"
+        verbose_name_plural = "Категории"
+
+class database_products(models.Model):
+#    Products_CHOICES = (
+#        ('food', (
+#               ('cookery', 'Cookery'),
+#               ('meal', 'Meal'),
+#            )
+#        ),
+#        ('unknown', 'Unknown')
+#    )
+    
+#    product = models.CharField(verbose_name=u'Type product', max_lenght=30, choices=Products_CHOICES)
+
+    # Основные свойства новости
+
+    title = models.CharField(u'Заголовок', max_length=255)
+    author = models.ForeignKey(User, related_name='product', verbose_name=u'Автор')
+    category = models.ForeignKey(Categories, related_name='product', verbose_name=u'Категория')
+
+    ItemID = models.PositiveIntegerField(verbose_name=u'ItemID', default=0)
+
+	# Ценники
+
+    regular_price = models.DecimalField(verbose_name=u'Обычная цена', max_digits=8, decimal_places=2, default=0)
+    sale_price = models.DecimalField(verbose_name=u'Продажная цена', max_digits=8, decimal_places=2, default=0)
+
+	# Описание продукта
+
+    item_description = models.CharField(u'Описание продукта', max_length=255)
+    description = models.TextField(u'Описание продукта')
+
+    # Картинки
+    # Абсолютный путь к главной фотографии
+
+    def set_path_photo(self, filename):
+        return 'photo/rubric/%s/category/%s/%.8d/%s' % (self.category.rubric.slug,
+                                                        self.category.slug,
+                                                        self.id,
+                                                        filename)
+
+    photo = models.CharField(verbose_name=u'Фото', upload_to=set_path_photo, sizes=((125,125),(300,200),), blank=True)
+#    photo = ThumbField(verbose_name=u'Фото', upload_to=set_path_photo, sizes=((125,125),(300,200),), blank=True)
+#    photo = ImageWithThumbsField(u'Фото', upload_to=set_path_photo, sizes=((125,125),(300,200),), blank=True)
+#    photo = models.ImageField(u'Фото', upload_to=set_path_photo, blank=True)
+    photo_sign = models.CharField(u'Подпись к фото', max_length=255, blank=True)
+#    photo = models.ImageField('Фото', upload_to='photos/products/%Y/%m/%d/%.8d'%self.pk, blank=False)
+#    thumb_main = ThumbField(source='photo', size=[298,198], upload_to='photos/products/%Y/%m/%d')
+#    thumb_big = ThumbField(source='photo', size=[197,132], upload_to='photos/products/%Y/%m/%d')
+#    thumb_middle = ThumbField(source='photo', size=[88,65], upload_to='photos/products/%Y/%m/%d')
+#    thumb_small = ThumbField(source='photo', size=[38,38], upload_to='photos/products/%Y/%m/%d')
+
+    # Дополнительные свойства
+#    first_locked = models.BooleanField(u'На главной', default=0, help_text='Новость будет закреплена на главной')
+#    rubric_locked = models.BooleanField(u'В рубрике', default=0, help_text='Новость будет закреплена в рубрике')
+#    published = models.BooleanField(u'Опубликована', default=0)
+    add_date = models.DateTimeField(u'Дата добавления', auto_now_add=True)
+#    show_in_newslist = models.BooleanField(u'В ленте', default=1, help_text='Новость будет отображаться в ленте новостей')
+#    bold_title = models.BooleanField(u'Выделять заголовок', default=0, help_text='Новость будет выделена жирным')
+    pub_date = models.DateTimeField(u'Дата публикации', null=True, blank=True)
+    keywords = models.CharField(u'Клчевые слова', max_length=255, blank=True)
+
+    # Счетчики
+
+    view_count = models.PositiveIntegerField('Просмотров', default=0)
+#    comment_count = models.PositiveIntegerField('Комментариев', default=0)
+    rating = models.PositiveIntegerField('Средняя оценка', default=0)
+    number_of_ratings = models.PositiveIntegerField('Количество оценок', default=0)
+
+    # Пересчет комментариев
+
+#    def update_comment_count(self):
+#        self.comment_count = self.comments.count()
+#        self.save()
+
+    # Увеличение количества просмотров
+
+    def increase_view(self):
+        self.view_count = self.view_count + 1
+        self.save()
+
+    # Абсолютный адрес товара
+
+    def get_absolute_url(self):
+        if self.pub_date:
+            return '/rubric/%s/%d/%.2d/%.2d/%.8d/' % (self.rubric.slug,
+                                                      self.pub_date.year,
+                                                      self.pub_date.month,
+                                                      self.pub_date.day,
+                                                      self.pk)
+        else:
+            return '/rubric/not_published/'
+
+    def __unicode__(self):
+        if self.pub_date:
+            return '[%.2d.%.2d.%.4d] %s' % (self.pub_date.day, 
+                self.pub_date.month, self.pub_date.year, 
+                self.title)
+        else:
+            return self.title
+
+    class Meta:
+        verbose_name = "Продукт"
+        verbose_name_plural = "Продукты"
+
+# Модель доподнительных фотографий для продуктов
+
+class Extra_Photo(models.Model):
+    news = models.ForeignKey(database_products, related_name='photos', verbose_name='Продукт')
+    sign = models.CharField(u'Подпись', max_length=255)
+    # Абсолютный путь к дополнительной фотографии
+
+    def get_absolute_path_photo_extra(self):
+        return '/photo/rubric/%s/category/%s/%.8d/extra/' % (self.rubric.slug,
+		                                                     self.category.rubric.slug,
+                                                             self.pk)
+    image = models.ImageField(u'Фото', upload_to=get_absolute_path_photo_extra, blank=False)
+#    thumb = ThumbField(source='image', size=[88,65], upload_to='photos/extra/%Y/%m/%d')
+
+    class Meta:
+        verbose_name = u'фотографии'
+        verbose_name_plural = u'дополнительные фотографии'

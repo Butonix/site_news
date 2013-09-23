@@ -1,0 +1,9 @@
+				<div id="header_banner">
+                    {% if banner_top %}
+                        {% if banner_top.image %}
+				<a href="{{banner_top.link}}" target="_blank"><img src="{{banner_top.image.url}}" alt="" /></a>
+                        {% else %}
+				{{banner_top.code|safe}}
+                        {% endif%}
+                    {% endif %}
+				</div>

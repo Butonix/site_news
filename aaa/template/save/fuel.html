@@ -1,0 +1,38 @@
+{% extends 'index.html'%}
+{% load markup %}
+
+{% block content %}
+<td id="content_block_left">
+    <h1>Цены на топливо {{date|date:"d.m.Y"}}</h1>
+		<table id="toplivo">
+			<tr class="toplivo">
+				<td class="corner_toplivo_01"><img src="/static/images/corner_01.gif" align="left" alt="" /></td>
+				<td class="toplivo_head" width="70">А-98</td>
+				<td class="toplivo_head" width="70">А-95</td>
+				<td class="toplivo_head" width="70">А-92</td>
+				<td class="toplivo_head" width="70">А-76</td>
+				<td class="corner_toplivo_02" width="70">ДТ</td>
+			</tr>
+		</table>
+		<table id="toplivo">
+            {% for item in price %}
+			<tr>
+				<td class="toplivo_content_left">
+                {% if item.company.logo %}
+                <img src="{{item.company.logo.url}}" width="{{item.company.logo.width}}" height="{{item.company.logo.height}}" align="left">
+                <span style="line-height:{{item.company.logo.height}}px;">{{item.company}}</span>
+                {% else %}
+                <span>{{item.company}}</span>
+                {% endif%}
+                </td>
+				<td class="toplivo_content" width="70">{{item.a98}}</td>
+				<td class="toplivo_content" width="70">{{item.a95}}</td>
+				<td class="toplivo_content" width="70">{{item.a92}}</td>
+				<td class="toplivo_content" width="70">{{item.a76}}</td>
+				<td class="toplivo_content_right" width="70">{{item.dt}}</td>
+			</tr>
+            {% endfor %}
+		</table>
+	<p class="metka">Все цены указаны в гривнах за 1 литр</p>
+</td>
+{% endblock %}

@@ -1,0 +1,431 @@
+{% load markup %}
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+{% block meta %}
+<title>MK.MK.UA - Николаевская информационно-аналитическая интернет-газета</title>
+<meta name="keywords" content="Новости, Николаев, статьи, Николаеве, Чайка, Украина, жить, волонтеры" />
+<meta name="description" content="Николаевская информационно-аналитическая интернет-газета" />
+<meta name="verify-v1" content="/dpYaXhkzOHZRqhpQqJJCWwIWLrB19vF48l0gcQItP8=" />
+{% endblock %}
+<link href="/static/styles/style.css" rel="stylesheet" type="text/css" />
+</head>
+
+<script type="text/javascript">
+	var _gaq = _gaq || [];
+	_gaq.push(['_setAccount', 'UA-12559620-1']); 
+	_gaq.push(['_trackPageview']);
+
+	(function() {
+		var ga = document.createElement('script');
+		ga.type = 'text/javascript';
+		ga.async = true;
+		ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+		var s = document.getElementsByTagName('script')[0];
+		s.parentNode.insertBefore(ga, s);
+	})();
+</script>
+
+<body>
+
+	<table id="container">
+		<tr>
+			<td id="header_top">
+				<div id="slogan">Николаевская информационно-аналитическая интернет-газета</div>
+				<div id="header_menu">
+					<a class="main_link" href="/">Главное</a>
+					<a href="/subscribe/">Подписка</a>
+					<a href="/feeds/latest/">RSS лента</a>
+					<a href="/contacts/">Контакты</a>
+				</div>
+			</td>
+		</tr>
+		<tr>
+			<td id="header_middle">
+				<div id="logo"><a href="/"><img src="/static/images/logo.gif" alt="" /></a></div>
+				<div id="header_banner">
+                    {% if banner_top %}
+                        {% if banner_top.image %}
+				<a href="{{banner_top.link}}" target="_blank"><img src="{{banner_top.image.url}}" alt="" /></a>
+                        {% else %}
+				{{banner_top.code|safe}}
+                        {% endif%}
+                    {% endif %}
+				</div>
+			</td>
+		</tr>
+		<tr>
+			<td id="navigation">
+				<ul>
+					{% ifequal page_url '/' %}<li><span><a href="/">Главное</a></span></li>{% else %}<li><a href="/">Главное</a></li>{% endifequal %}
+			{% for rubric in rubrics %}
+			{% ifequal rubric.get_absolute_url page_url %}<li><span><a href="{{rubric.get_absolute_url}}">{{rubric.name|capfirst}}</a></span></li>{% else %}<li><a href="{{rubric.get_absolute_url}}">{{rubric.name|capfirst}}</a></li>{% endifequal %}
+			{% endfor %}
+			{% ifequal page_url '/playbill/' %}<li><span><a href="/playbill/">Афиша</a></span></li>{% else %}<li><a href="/playbill/">Афиша</a></li>{% endifequal %}
+				</ul>
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<table id="content">
+					<tr>
+                        {% block content %}
+						<td id="content_block_left">
+                            {% if first_locked %}
+							<div class="main_news">
+								<h1><a href="{{first_locked.get_absolute_url}}">{{first_locked.title}}</a></h1>
+								<p class="image"><a href="{{first_locked.get_absolute_url}}"><img alt="{{first_locked.photo_sign}}" title="{{first_locked.photo_sign}}" src="{{first_locked.thumb_big.url}}" width="197" height="132"/></a></p>
+								<div class="text">
+									<p>
+										<span class="date">{{first_locked.pub_date|date:"d.m H:i"}}</span>
+										<span class="comment"><strong class="people">{{first_locked.view_count}}</strong><strong class="chat">{{first_locked.comment_count}}</strong></span>
+									</p>
+									<p class="news_text"><a href="{{first_locked.get_absolute_url}}">{{first_locked.text_first_locked}}</a></p>
+								</div>
+							</div>
+                            {% endif %}
+                            {% for news in rubric_locked %}
+							<div class="main_news">
+								<p class="image"><a href="{{news.get_absolute_url}}"><img alt="{{news.photo_sign}}" title="{{news.photo_sign}}" src="{{news.thumb_middle.url}}" width="88" height="65"/></a></p>
+								<div class="text">
+									<p>
+										<span class="date">{{news.pub_date|date:"d.m H:i"}}</span>
+										<span class="comment"><strong class="people">{{news.view_count}}</strong><strong class="chat">{{news.comment_count}}</strong></span>
+									</p>
+									<p class="news_name"><a href="{{news.get_absolute_url}}" rel="nofollow">{{news.title}}</a></p>
+									<p class="news_text"><a href="{{news.get_absolute_url}}" rel="nofollow">{{news.text_middle}}</a></p>
+								</div>
+							</div>
+                            {% endfor %}
+
+                            {% for rubric in rubrics %}
+                                    {% if forloop.first %}
+							<h3 class="white"><span class="left"><a href="{{rubric.get_absolute_url}}">Аналитика, комментарии, мнения</a></span><a href="{{rubric.get_absolute_url}}" class="all">Все статьи раздела</a></h3>
+								<table class="center analitic">
+            								<tr>
+            									<td class="corner_01"><img src="/static/images/corner_01.gif" alt="" /></td>
+            								</tr>
+            								<tr>
+            									<td class="analitic">
+            										<table width="100%">
+            											<tr>
+            												{% for news in rubric.news.with_no_flags %}
+                                                            {% ifnotequal forloop.counter 5 %}
+            												<td width="25%">
+            													<div class="main_news">
+            														<p><a href="{{news.get_absolute_url}}"><img alt="{{news.photo_sign}}" title="{{news.photo_sign}}" src="{{news.thumb_middle.url}}" width="88" height="65"/></a></p>
+            														<p><span class="date_main">{{news.pub_date|date:"d.m H:i"}}</span></p>
+            														<p class="news_text" style="line-height:normal;"><a style="font-size:11px;" href="{{news.get_absolute_url}}">{{news.title}}</a></p>
+            													</div>
+            												</td>
+                                                            {% endifnotequal %}
+            												{% endfor %}
+            											</tr>
+            										</table>
+            									</td>
+            								</tr>
+            								<tr>
+            									<td class="corner_02"><img src="/static/images/corner_03.gif" alt="" /></td>
+            								</tr>
+            							</table>
+                                    {% else %}
+            							<h3><span class="left"><a href="{{rubric.get_absolute_url}}">{{rubric.name|capfirst}}</a></span><a href="{{rubric.get_absolute_url}}" class="all">Все статьи раздела</a></h3>
+                                        <div class="main_news">
+                                        {% for news in rubric.news.with_no_flags %}
+                                            {% if forloop.first %}
+                                                <p class="image"><a href="{{news.get_absolute_url}}"><img alt="{{news.photo_sign}}" title="{{news.photo_sign}}" src="{{news.thumb_middle.url}}" width="88" height="65" /></a></p>
+                                                <div class="text">
+                                                    <p>
+														<span class="date">{{news.pub_date|date:"d.m H:i"}}</span>
+														<span class="comment"><strong class="people">{{news.view_count}}</strong><strong class="chat">{{news.comment_count}}</strong></span>
+													</p>
+                                                    <p class="news_name"><a href="{{news.get_absolute_url}}">{{news.title}}</a></p>
+                                                    <p class="news_text"><a href="{{news.get_absolute_url}}">{{news.text_middle}}</a></p>
+                                                </div>
+                                                <div class="razdel_links">
+                                            {% else %}
+                                                <p class="razdel"><span class="date">{{news.pub_date|date:"d.m H:i"}}</span>
+                                                <strong><b><a href="{{news.get_absolute_url}}">{{news.title}}</a></b> [{{news.view_count}}/{{news.comment_count}}]</strong>
+                                                </p>
+                                            {% endif %}
+                                        {% endfor %}
+                                        </div>
+                                        </div>
+                                    {% endif %}
+                            {% endfor %}
+						</td>
+                        {% endblock %}
+
+						<td id="content_block_center">
+							<h2><span>{{newslist.0.pub_date|date:"l, d.m.Y"}}</span><strong></strong></h2>
+							<table class="center">
+								<tr>
+									<td class="corner_01"><img src="/static/images/corner_01.gif" alt="" /></td>
+								</tr>
+                                {% regroup newslist by pub_date|date:"d.m" as date_list %}
+								<tr>
+									<td class="lenta">
+                                        {% for date in date_list %}
+                                            {% if not forloop.first %}
+                                            <h2><span>&nbsp;</span><strong>{{date.grouper}}</strong></h2>
+                                            {% endif %}
+                                            {% for item in date.list %}
+                                            {% if item.bold_title %}
+                                            <p><span class="time"><b>{{item.pub_date|date:"H:i"}}</b></span><span class="link"><b><a href="{{item.get_absolute_url}}">{{item.title}}</a></b></span></p>
+                                            {% else %}
+                                            <p><span class="time"><b>{{item.pub_date|date:"H:i"}}</b></span><span class="link"><a href="{{item.get_absolute_url}}">{{item.title}}</a></span></p>
+                                            {% endif %}
+                                            {% endfor %}
+                                        {% endfor %}
+									</td>
+								</tr>
+								<tr>
+									<td class="corner_02"><img src="/static/images/corner_03.gif" alt="" /></td>
+								</tr>
+							</table>
+
+                            <h2>Фоторепортажи</h2>
+							<table class="center">
+								<tr>
+									<td class="corner_01"><img src="/static/images/corner_01.gif" alt="" /></td>
+								</tr>
+								<tr>
+									<td class="lenta">
+										<div id="photoreport">
+											<div id="photoreport_img">
+                                                {% for report in photoreports %}
+												<a href="{{report.get_absolute_url}}"><img src="{{report.thumb_small.url}}" width="72" height="65" alt="{{report.title}}" title="{{report.title}}" /></a>
+                                                {% endfor %}
+											</div>
+											<a class="fotoreportag" href="/photoreport/">Все фоторепортажи</a>
+										</div>
+									</td>
+								</tr>
+								<tr>
+									<td class="corner_02"><img src="/static/images/corner_03.gif" alt="" /></td>
+								</tr>
+							</table>
+
+							<h2><span>Самые комментируемые</span><strong>&nbsp;</strong></h2>
+							<table class="center">
+								<tr>
+									<td class="corner_01"><img src="/static/images/corner_01.gif" alt="" /></td>
+								</tr>
+								<tr>
+									<td class="lenta">
+                                        {% for news in popular_comment %}
+										<div class="main_news popular_news">
+											<p class="image"><a href="{{news.get_absolute_url}}"><img alt="{{news.photo_sign}}" title="{{news.photo_sign}}" src="{{news.thumb_small.url}}" width="38" height="38" /></a></p>
+											<div class="text">
+												<p>
+													<span class="date">{{news.pub_date|date:"d.m H:i"}}</span>
+													<span class="comment"><strong class="people">{{news.view_count}}</strong><strong class="chat">{{news.comment_count}}</strong></span>
+												</p>
+												<p class="news_text"><a href="{{news.get_absolute_url}}">{{news.title}}</a></p>
+											</div>
+										</div>
+                                        {% endfor %}
+									</td>
+								</tr>
+								<tr>
+									<td class="corner_02"><img src="/static/images/corner_03.gif" alt="" /></td>
+								</tr>
+							</table>
+
+                            <h2><span>Самые читаемые</span><strong>&nbsp;</strong></h2>
+							<table class="center">
+								<tr>
+									<td class="corner_01"><img src="/static/images/corner_01.gif" alt="" /></td>
+								</tr>
+								<tr>
+									<td class="lenta">
+                                        {% for news in popular_view %}
+										<div class="main_news popular_news">
+											<p class="image"><a href="{{news.get_absolute_url}}"><img alt="{{news.photo_sign}}" title="{{news.photo_sign}}" src="{{news.thumb_small.url}}" width="38" height="38" /></a></p>
+											<div class="text">
+												<p>
+													<span class="date">{{news.pub_date|date:"d.m H:i"}}</span>
+													<span class="comment"><strong class="people">{{news.view_count}}</strong><strong class="chat">{{news.comment_count}}</strong></span>
+												</p>
+												<p class="news_text"><a href="{{news.get_absolute_url}}">{{news.title}}</a></p>
+											</div>
+										</div>
+                                        {% endfor %}
+									</td>
+								</tr>
+								<tr>
+									<td class="corner_02"><img src="/static/images/corner_03.gif" alt="" /></td>
+								</tr>
+							</table>
+
+
+			<center><a href="/playbill/"><img src="/static/images/afisha_anim_180x100.gif" alt="blaybill"/></a></center>
+
+<!-- Job.Ukr.Net -->
+<style>
+.job-block {background:#eeeeee url(http://informers.ukr.net/job/sim/jobnewimg/bottom-bg.gif) repeat-x bottom;border:1px solid #c9c9c9;border-bottom:1px solid #c9c9c9;margin:10px auto;}
+.job-block .job-ttl {background:url(http://informers.ukr.net/job/sim/jobnewimg/ttl-bg.gif) repeat-x top;position:relative;height:38px;padding-left:18px;border-bottom:1px solid #c9c9c9;text-align:left;}
+.job-block .job-ttl a {font-family:Tahoma;font-size:12px;text-transform:uppercase;font-weight:bold;color:#000;text-decoration:none; position:relative;top:11px;}
+.job-logo-link {position:absolute;top:8px;right:8px;width:103px;height:22px;}
+.job-logo-link a {display:block;width:103px;height:22px;_background:none;_filter:progid:DXImageTransform.Microsoft.AlphaImageLoader (src='http://informers.ukr.net/job/sim/jobnewimg/job-logo-medium.png',sizingMethod='scale');cursor:pointer;position:static!important;}
+.job-logo-link img {_display:none;border:none;}
+.job-block .informer-block {padding:0px 3px 3px 3px;}
+</style>
+<div class="job-block">
+	<div class="job-ttl">
+		<noindex>
+			<!--!!!<a href="http://job.ukr.net/" target="_blank" rel="nofollow">RABOTA</a>-->
+		</noindex>
+		<div class="job-logo-link">
+			<noindex>
+				<!--!!!<a href="http://job.ukr.net/" target="_blank" rel="nofollow"><img src="http://informers.ukr.net/job/sim/jobnewimg/job-logo-medium.png" width="103" height="22"/></a>-->
+			</noindex>
+		</div>
+	</div>
+<div class="informer-block">
+	<div id="jobukrnet">Zagruzka...</div>
+		<script language="javascript" src="http://informers.ukr.net/job/js_search.php?reg=14&c=10&m=2&h&limit=24&search" charset="windows-1251"></script>
+</div>
+</div>
+<!-- Job.Ukr.Net -->
+							<!-- KinoTV.Ukr.Net -->
+							<h2>Новости<noindex><!--!!!<a href="http://kino.ukr.net/" target="_blank" style="text-decoration:underline;" rel="nofollow">Кино</a> и <a href="http://tv.ukr.net/" target="_blank" style="text-decoration:underline;" rel="nofollow">Тв</a></noindex></h2>-->
+							<table class="center01">
+								<tr>
+									<td class="corner_01"><img src="/static/images/corner_01.gif" alt="" /></td>
+								</tr>
+								<tr>
+									<td class="lenta_anonce">
+							            <div id="kinoukrnet">Загрузка...</div>
+							            <div id="tvukrnet">Загрузка...</div>
+							            <script language="javascript" src="http://informers.ukr.net/kino/js.php?c=4&img=left&h" charset="windows-1251"></script>
+							            <script language="javascript" src="http://informers.ukr.net/tv/js.php?c=4&img=left&h" charset="windows-1251"></script>
+							        </td>
+								</tr>
+								<tr>
+									<td class="corner_02"><img src="/static/images/corner_03.gif" alt="" /></td>
+								</tr>
+							</table>
+							<!-- KinoTV.Ukr.Net -->
+<!--
+							<h3>Афиша</h3>
+							<p class="anonce"><span class="anonce_date">С 19 по 33<br /> декабря</span><span class="anonce_text">Вступительная кампания в вузы все еще продолжается. Но уже можно подвести первые итоги по высшим учебным заведениям Николаевской области III-IV уровней аккредитации.</span></p>
+							<p class="anonce"><span class="anonce_date">С 19 по 33<br /> декабря</span><span class="anonce_text">Вступительная кампания в вузы все еще продолжается. Но уже можно подвести первые итоги по высшим учебным заведениям Николаевской области III-IV уровней аккредитации.</span></p>
+							<p class="anonce"><span class="anonce_date">С 19 по 33<br /> декабря</span><span class="anonce_text">Вступительная кампания в вузы все еще продолжается. Но уже можно подвести первые итоги по высшим учебным заведениям Николаевской области III-IV уровней аккредитации.</span></p>
+							<p class="anonce anonce_last"><span class="anonce_date">С 19 по 33<br /> декабря</span><span class="anonce_text">Вступительная кампания в вузы все еще продолжается. Но уже можно подвести первые итоги по высшим учебным заведениям Николаевской области III-IV уровней аккредитации.</span></p>
+-->
+						</td>
+						<td id="content_block_right">
+							<form id="search" action="/search/" method="GET">
+								<table>
+									<tr>
+										<td><input class="search_input" name="query" type="text" /></td>
+										<td align="left"><input class="search_button" name="search_button" type="submit" value="" /></td>
+									</tr>
+									<tr>
+										<td><a href="/search/">Расширенный поиск</a></td>
+										<td><img src="/static/images/spacer.gif" alt="" /></td>
+									</tr>
+								</table>
+							</form>
+							<p class="valute"><a class="valute" href="/currency/" rel="nofollow">Курсы<br /> валют</a><a class="toplivo" href="/fuel/" rel="nofollow">Цены на топливо</a></p>
+							<!--<a target="_blank" href="http://www.gismeteo.ru" rel="nofollow">--><h4>Погода в Николаеве</h4><!--</a>-->
+							<table class="pogoda">
+                                {% if weather_today %}
+								<tr>
+									<td nowrap="nowrap">Сегодня</td>
+									<td width="50" height="24" align="center">
+									    {% ifnotequal weather_today.precipitation 10 %}
+										<img src="/static/images/weather/p_{{weather_today.precipitation}}.png">
+									    {% else %}
+										<img src="/static/images/weather/c_{{weather_today.cloudiness}}.png">
+									    {% endifnotequal %}
+									</td>
+									<td nowrap="nowrap">{{weather_today.temp_min}}...{{weather_today.temp_max}}</td>
+								</tr>
+                                {% endif %}
+                                {% if weather_tomorrow %}
+								<tr>
+									<td nowrap="nowrap">Завтра</td>
+									<td width="50" height="24" align="center">
+									    {% ifnotequal weather_tomorrow.precipitation 10 %}
+										<img src="/static/images/weather/p_{{weather_tomorrow.precipitation}}.png">
+									    {% else %}
+										<img src="/static/images/weather/c_{{weather_tomorrow.cloudiness}}.png">
+									    {% endifnotequal %}
+									</td>
+									<td nowrap="nowrap">
+									    {{weather_tomorrow.temp_min}}...{{weather_tomorrow.temp_max}}
+									</td>
+								</tr>
+                                {% endif %}
+							</table>
+							<h4>Анонсы и реклама</h4>
+							{% for announce in announces %}
+							{% if announce.link %}<a target="_blank" href="{{announce.link}}">{% endif %}
+							{% if announce.image %}
+							<p class="anonce_image"><img src="{{announce.image.url}}" width="{{announce.image.width}}" height="{{announce.image.height}}" alt="" /></p>
+							{% endif %}
+							<div class="anonce_right">
+								<p class="anonce_right">
+									<table class="center01">
+										<tr>
+											<td class="corner_01"><img src="/static/images/corner_01.gif" alt="" /></td>
+										</tr>
+										<tr>
+											<td class="lenta_anonce"><strong>{{announce.title}}</strong></td>
+										</tr>
+										<tr>
+											<td class="corner_02"><img src="/static/images/corner_03.gif" alt="" /></td>
+										</tr>
+									</table>
+								</p>
+								{{announce.text|markdown}}
+							</div>
+							{% if announce.link %}</a>{% endif %}
+							{% endfor %}
+			{% for banner in banner_right %}
+				{% if banner.image %}
+					<p class="banner"><a target="blank" href="{{banner.link}}" rel="nofollow"><img src="{{banner.image.url}}" alt="" /></a></p>
+				{% else %}
+					<p class="banner">{{banner.code|safe}}</p>
+				{% endif %}
+			{% endfor %}
+						</td>
+					</tr>
+				</table>
+				<table>
+					<tr>
+						<td height="30"><img src="/static/images/spacer.gif" width="1002" height="1" alt="" /></td>
+					</tr>
+				</table>
+			</td>
+		</tr>
+		<noindex>
+<!--!!!		<tr>
+			<td id="footer">
+				<a href="/" rel="nofollow">главное</a> &nbsp;|&nbsp;
+			{% for rubric in rubrics %}
+				<a href="{{rubric.get_absolute_url}}" rel="nofollow">{{rubric.name}}</a> &nbsp;|&nbsp;
+			{% endfor %}
+				<a href="/contacts/" rel="nofollow">контакты</a>
+			</td>
+		</tr>
+		<tr>
+			<td id="copyright">Николаевская информационно-аналитическая интернет-газета. При использовании материалов - ссылка на сайт обязательна.<br />
+				<strong>Mk.Mk.ua</strong> 2008. Все права защищены.<a href="http://www.creativeinfinite.com/ru/" target="_blank" rel="nofollow">Создание сайтов - CreativeInfinite.</a> <a href="http://www.atixmedia.com/" target="_blank" rel="nofollow">Дизайн сайта - AtixMedia</a>
+			</td>
+		</tr>-->
+		</noindex>
+	</table>
+</body>
+</html>
+{% comment %}
+{{total_sql}}:{{queries|length}}<br>
+-----------------<br>
+{% for query in queries %}
+{{query.time}} : {{query.sql}}<br>
+{% endfor %}
+{% endcomment %}

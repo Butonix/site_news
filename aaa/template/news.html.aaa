@@ -1,0 +1,147 @@
+﻿{% load markup %}
+
+{% block meta %}
+<html>
+<title>{{news.title}} - Информационно аналитическая интернет газета MK.MK.UA.</title>
+<meta name="keywords" content="{{news.keywords}}" />
+<meta name="description" content="{{news.text_middle}}" />
+{% endblock %}
+<body>
+{% block content %}
+<td id="content_block_left">{% comment %}{% if news.lang == 1 %}ru{% elseif news.lang == 2 %}uk{% endif %}' {% if news.lang == 1 %}ru{% elseif news.lang == 2 %}uk{% endif %}{% endcomment %}
+{% spaceless %}
+	{% ifequal news.lang 1 %}
+		<div class="main_news" lang='ru' xml:lang='ru'>
+	{% endifequal %}
+	{% ifequal news.lang 2 %}
+		<div class="main_news" lang='uk' xml:lang='uk'>
+	{% endifequal %}
+		<h1>{{news.title}}</h1>
+		<div class="news">
+			<div class="news_image">
+			<a title="открыть в новом окне" href="javascript:void(0);" onclick="window.open('/photo/news/{{news.id}}/','{{news.id}}','width={{news.photo.width}},height={{news.photo.height}}');"><img src="{{news.thumb_main.url}}" width="298" height="198" align="left" alt="" /></a>
+				<span class="photo_name"><center>{{news.photo_sign}}</center>
+				{% for photo in news.photos.all %}
+				{% if forloop.first %}<br/>{% endif %}
+				<a title="открыть в новом окне" href="javascript:void(0);" onclick="window.open('/photo/extra/{{photo.id}}/','{{photo.id}}','width={{photo.image.width}},height={{photo.image.height}}');"><img src="{{photo.thumb.url}}" width="88" height="65" alt="" /></a>
+				{% endfor %}
+				</span>
+			</div>
+			<p>
+				<table style="width:170px;">
+					<tr>
+						<td class="date_main" style="width:80px !important;">{{news.pub_date|date:"d.m.y H:i"}}</td>
+						<td width="11"><img src="/static/images/people.gif" style="border:0px; margin:0px; padding:0px;" alt="" /></td>
+						<td class="comment_main_news_text">{{news.view_count}}</td>
+						<td width="14"><img src="/static/images/chat.gif" style="border:0px; margin:0px; padding:0px;" alt="" /></td>
+						<td class="comment_main_news_text">{{news.comment_count}}</td>
+					</tr>
+				</table>
+			<p>
+            <p><strong>{{news.text_middle}}</strong>{{news.text_big|markdown}}</p>
+        </div>
+        {% if not news.external_author %}
+        <p class="author">{{news.author.get_full_name}}</p>
+        {% else %}
+        <p class="author">{{news.external_author}}</b></p>
+        {% endif %}
+    </div>
+{% endspaceless %}
+
+    {% if tagged|length %}
+    <h3>Похожие новости</h3>
+    <div class="main_news">
+        <div class="razdel_links_main">
+            {% for item in tagged|dictsortreversed:"pub_date" %}
+            <p class="razdel"><span class="date">{{item.pub_date|date:"d.m.y H:i"}}</span>
+            {% if item.bold_title %}
+            <strong><b><a href="{{item.get_absolute_url}}">{{item.title}}</a></b></strong>
+            {% else %}
+            <strong><a href="{{item.get_absolute_url}}">{{item.title}}</a></strong>
+            {% endif %}
+            </p>
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+
+    {% if news.comment_count %}
+    <h3>Комментарии</h3>
+    <div class="main_news">
+        {% for comment in news.comments.all %}
+        {% if comment.email%}
+        <p class="user_comment"><strong><a href="mailto:{{comment.email}}">[{{comment.pub_date|date:"d.m H.i"}}] {{comment.user_name}}</a></strong><br/>{{comment.text}}</p>
+        {% else %}
+        <p class="user_comment"><strong>[{{comment.pub_date|date:"d.m H.i"}}] {{comment.user_name}}</strong><br/>{{comment.text}}</p>
+        {% endif %}
+        {% endfor %}
+    </div>
+    {% endif %}
+    <h3>Выскажите свое мнение</h3>
+
+    <form action="." method="POST" class="form_send_comment">
+        <table id="send_comment">
+            <tr>
+                <td></td>
+                <td>{{form.user_name.errors}}</td>
+            </tr>
+            <tr>
+                <td class="td_name">{{form.user_name.label}}</td>
+                <td class="input_name" width="100%" colspan="2">{{form.user_name}}</td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>{{form.email.errors}}</td>
+            </tr>
+            <tr>
+                <td class="td_name">{{form.email.label}}</td>
+                <td class="input_name" width="100%" colspan="2">{{form.email}}</td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>{{form.text.errors}}</td>
+            </tr>
+            <tr>
+                <td class="td_name">{{form.text.label}}</td>
+                <td class="textarea_comment" width="100%" colspan="2">{{form.text}}</td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>{{form.captcha.errors}}</td>
+            </tr>
+            <tr>
+                <td class="td_name">{{form.captcha.label}}</td>
+                <td class="input_code" width="100%">{{form.captcha}}</td>
+            </tr>
+            <tr>
+                <td class="td_name"><img src="/static/images/spacer.gif" alt="" /></td>
+                <td width="100%" colspan="2"><input class="button_comment" name="send" type="submit" value="Отправить" /></td>
+            </tr>
+        </table>
+    </form>
+<h3>Реклама</h3>
+<!-- Yandex.Direct -->
+<script type="text/javascript">
+yandex_partner_id = 67454;
+yandex_site_bg_color = 'FFFFFF';
+yandex_site_charset = 'utf-8';
+yandex_ad_format = 'direct';
+yandex_font_size = 1.1;
+yandex_direct_type = 'flat';
+yandex_direct_limit = 4;
+yandex_direct_header_bg_color = 'FEEAC7';
+yandex_direct_title_color = '0000CC';
+yandex_direct_url_color = '006600';
+yandex_direct_all_color = '0000CC';
+yandex_direct_text_color = '000000';
+yandex_direct_hover_color = '0066FF';
+yandex_direct_favicon = true;
+document.write('<sc'+'ript type="text/javascript" src="http://an.yandex.ru/system/context.js"></sc'+'ript>');
+</script>
+<!-- /Yandex.Direct -->
+</td>
+<!-- {{queries}} -->
+<!-- {{total_sql}} -->
+{% endblock %}
+</body>
+</html>

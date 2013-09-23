@@ -1,0 +1,124 @@
+﻿from django.db.models import ImageField
+from django.core.files.base import ContentFile
+from django.db.models import signals
+#from utils import rescale
+
+import os
+
+import Image as pil
+
+from cStringIO import StringIO
+
+#from django.conf import settings
+
+def rescale(data, width, height, force=True):
+    max_width = width
+    max_height = height
+    # Картинки
+    # Абсолютный путь к дополнительной фотографии
+#    from datetime import datetime
+#    now = datetime.now()
+#    date_string = now.strftime('%Y/%m/%d')
+#    path = data.get_filename()
+#    path = u'%s%s' % (settings.MEDIA_ROOT, data, )
+    img = pil.open(data)#'/usr/local/www/mk_mk_mk_ua/static/photos/news/2012/09/28/social/images.jpeg'
+    format = img.format
+
+    if not force:
+        img.thumbnail((max_width, max_height), pil.ANTIALIAS)
+    else:
+        src_width, src_height = img.size
+        src_ratio = float(src_width) / float(src_height)
+        dst_width, dst_height = max_width, max_height
+        dst_ratio = float(dst_width) / float(dst_height)
+
+        if dst_ratio < src_ratio:
+            crop_height = src_height
+            crop_width = crop_height * dst_ratio
+            x_offset = int(float(src_width - crop_width) / 2)
+            y_offset = 0
+        else:
+            crop_width = src_width
+            crop_height = crop_width / dst_ratio
+            x_offset = 0
+            y_offset = int(src_height - crop_height) / 3
+        img = img.crop((x_offset, y_offset, x_offset+int(crop_width), y_offset+int(crop_height)))
+        img = img.resize((dst_width, dst_height), pil.ANTIALIAS)
+
+    tmp = StringIO()
+    img.save(tmp, format=format, quality=100)
+    tmp.seek(0)
+    output = tmp.getvalue()
+    tmp.close()
+
+    return output
+
+class ThumbField(ImageField):
+
+    def __init__(self, source, img_size, *args, **kwargs):
+        kwargs['blank'] = True
+        super(ThumbField, self).__init__(*args, **kwargs)
+        self.source = source
+        self.img_size = img_size
+
+    def contribute_to_class(self, cls, name):
+        self._field_name = name
+        super(ThumbField, self).contribute_to_class(cls, name)
+        signals.post_save.connect(self.force_rethumb, sender=cls, weak=False) #, dispatch_uid="thumb"
+
+    def generate_thumb_name(self, original):
+        filename = os.path.split(original)[-1].split('.')
+        if len(filename) > 1:
+            filename[-2] = filename[-2] + '.' + self._field_name
+        else:
+            filename.append('.'+self._field_name)
+        return '.'.join(filename)
+
+    def force_rethumb(self, instance, *args, **kwargs):
+        from news.models import Changed
+#        changed = getattr(instance, 'changed', None, )
+        try:
+            obj_changed = Changed.objects.get(pk=instance.pk, )
+        except Changed.DoesNotExist:
+            return
+        else:
+            changed = getattr(obj_changed, 'changed_%s' % self._field_name, None, )
+            if changed:
+                exec('obj_changed.changed_%s = False' % self._field_name)
+                obj_changed.save()
+                source = getattr(instance, self.source, None, )
+#        if not source:
+#            return
+#        try:
+#            old_instance = instance._default_manager.get(pk=instance.pk, )
+#            old_source = getattr(old_instance, self.source, )
+##            old_empty = old_source.path
+#        except:
+#            old_source = None
+##            old_empty = None
+
+#        try:
+#            if old_source:
+#                old_empty = old_source.path
+#            else:
+#                old_empty = None
+#        except ValueError, e:
+#            old_empty = None
+
+#        try:
+#            src_empty = source.path
+#        except ValueError, e:
+#            return
+#            src_empty = None
+#        if not src_empty:
+#            return
+
+#        if old_empty or getattr(source, 'path') != getattr(old_source, 'path'):
+#        if getattr(source, 'path') != getattr(old_source, 'path'):
+                thumb = getattr(instance, self._field_name, )
+                filename = self.generate_thumb_name(source.path, )
+                raw = rescale(source.path, self.size[0], self.size[1], )
+                thumb.save(name=filename, content=ContentFile(raw), save=False, )
+#            instance.changed=False
+#            instance.save()
+#        instance.save(update_fields=True, )

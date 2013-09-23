@@ -1,0 +1,45 @@
+{% extends 'index.html'%}
+{% load markup %}
+
+{% block content %}
+<td id="content_block_left">
+    <h1>Курсы валют {{date|date:"d.m.Y"}}</h1>
+		<table id="valute">
+			<tr class="toplivo">
+				<td class="corner_toplivo_01"><img src="/static/images/corner_01.gif" align="left" alt="" /></td>
+				<td class="valute_head" colspan="2">EUR</td>
+				<td class="valute_head" colspan="2">USD</td>
+				<td class="corner_valute_02" colspan="2">RUR</td>
+			</tr>
+			<tr class="toplivo_pokupka">
+				<td>&nbsp;</td>
+				<td width="58">покупка</td>
+				<td width="58">продажа</td>
+				<td width="58">покупка</td>
+				<td width="58">продажа</td>
+				<td width="58">покупка</td>
+				<td width="58" style="border-right:0px solid #ffffff;">продажа</td>
+			</tr>
+		</table>
+		<table id="valute">
+            {% for item in exchange %}
+			<tr>
+				<td class="toplivo_content_left">
+				{% if item.company.logo %}
+                <img src="{{item.company.logo.url}}" width="{{item.company.logo.width}}" height="{{item.company.logo.height}}" align="left">
+                {% if item.company.name %}<span style="line-height:{{item.company.logo.height}}px;">{{item.company.name}}</span>{% endif %}
+                {% else %}
+                <span>{{item.company.name}}</span>
+                {% endif%}
+				</td>
+				<td class="toplivo_content" width="58">{{item.eur_buy}}</td>
+				<td class="toplivo_content" width="58">{{item.eur_sell}}</td>
+				<td class="toplivo_content" width="58">{{item.usd_buy}}</td>
+				<td class="toplivo_content" width="58">{{item.usd_sell}}</td>
+				<td class="toplivo_content" width="58">{{item.rur_buy}}</td>
+				<td class="toplivo_content_right" width="58">{{item.rur_sell}}</td>
+			</tr>
+            {% endfor %}
+		</table>
+</td>
+{% endblock %}

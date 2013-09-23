@@ -1,0 +1,2 @@
+<script type="text/javascript">
+<?php echo $sape_article->return_announcements(); ?>

@@ -1,0 +1,112 @@
+﻿{% extends 'index.html'%}
+<!--{1% load markup %}-->
+
+{% block meta %}
+<title>MK.MK.UA - Видеоновости компании NTDtv</title>
+<meta name="keywords" content="ntdtv, mk.mk.ua" />
+<meta name="description" content="Видеоновости компании NTDTV" />
+{% endblock %}
+{% block popular_comment %}
+{% endblock %}
+{% block popular_view %}
+{% endblock %}
+
+{% block content %}
+<td id="content_block_left">
+	<div class="ntdtv_main_news">
+		<h1>Телеканал NTD</h1>
+<script>
+var ntdcfg_width = 609;
+var ntdcfg_height = 480;
+var ntdcfg_video_num = 11;
+var ntdcfg_video_auto = 1;
+var ntdcfg_player_id = 'ntd_pl_1';
+var ntd_h = ''+'<scr'+'ipt sr'+'c="http://feed.ntdtv.ru/vp.php?n='+ntdcfg_video_num+'&ver=2'+'&w='+ntdcfg_width+'&h='
++ntdcfg_height+'&auto='+ntdcfg_video_auto+'&id='+ntdcfg_player_id+'"></scr'+'ipt>';
+document.write(ntd_h);
+</script>
+<!--<p>Самые последние новости мира на сайте <noindex><a href="http://ntdtv.ru/" rel="nofollow">ntdtv.ru</a></noindex>. Телеканал NTD - будь в курсе последних событий.</p>-->
+	<table class="table_ntdtv_center">
+	<tr>
+	<td>
+		<h2><span>Самые комментируемые</span><!--<strong>&nbsp;</strong>--></h2>
+		<table class="ntdtv_center">
+			<tr>
+				<td class="corner_01"><img src="/static/images/corner_01.gif" alt="" /></td>
+			</tr>
+			<tr>
+				<td class="lenta">
+				{% for news in popular_comment %}
+					<div class="main_news popular_news">
+						<p class="image"><a href="{{news.get_absolute_url}}"><img alt="{{news.photo_sign}}" title="{{news.photo_sign}}" src="{{news.thumb_small.url}}" width="38" height="38" /></a></p>
+							<div class="text">
+								<p>
+									<span class="date">{{news.pub_date|date:"d.m H:i"}}</span>
+									<span class="comment"><strong class="people">{{news.view_count}}</strong><strong class="chat">{{news.comment_count}}</strong></span>
+								</p>
+								<p class="news_text"><a href="{{news.get_absolute_url}}">{{news.title}}</a></p>
+							</div>
+						</div>
+				{% endfor %}
+				</td>
+			</tr>
+<!--			<tr>
+				<td class="corner_02"><img src="/static/images/corner_03.gif" alt="" /></td>
+			</tr>-->
+		</table>
+	</td>
+	<td>
+		<h2><span>Самые читаемые</span><!--<strong>&nbsp;</strong>--></h2>
+		<table class="ntdtv_center">
+			<tr>
+				<td class="corner_01"><img src="/static/images/corner_01.gif" alt="" /></td>
+			</tr>
+			<tr>
+				<td class="lenta">
+				{% for news in popular_view %}
+					<div class="main_news popular_news">
+						<p class="image"><a href="{{news.get_absolute_url}}"><img alt="{{news.photo_sign}}" title="{{news.photo_sign}}" src="{{news.thumb_small.url}}" width="38" height="38" /></a></p>
+						<div class="text">
+							<p>
+								<span class="date">{{news.pub_date|date:"d.m H:i"}}</span>
+								<span class="comment"><strong class="people">{{news.view_count}}</strong><strong class="chat">{{news.comment_count}}</strong></span>
+							</p>
+							<p class="news_text"><a href="{{news.get_absolute_url}}">{{news.title}}</a></p>
+						</div>
+					</div>
+				{% endfor %}
+				</td>
+			</tr>
+<!--			<tr>
+				<td class="corner_02"><img src="/static/images/corner_03.gif" alt="" /></td>
+			</tr>-->
+		</table>
+	</td>
+	</tr>
+	</table>
+    </div>
+
+<h3>Реклама</h3>
+<!-- Yandex.Direct -->
+<script type="text/javascript">
+yandex_partner_id = 67454;
+yandex_site_bg_color = 'FFFFFF';
+yandex_site_charset = 'utf-8';
+yandex_ad_format = 'direct';
+yandex_font_size = 1.1;
+yandex_direct_type = 'flat';
+yandex_direct_limit = 4;
+yandex_direct_header_bg_color = 'FEEAC7';
+yandex_direct_title_color = '0000CC';
+yandex_direct_url_color = '006600';
+yandex_direct_all_color = '0000CC';
+yandex_direct_text_color = '000000';
+yandex_direct_hover_color = '0066FF';
+yandex_direct_favicon = true;
+document.write('<sc'+'ript type="text/javascript" src="http://an.yandex.ru/system/context.js"></sc'+'ript>');
+</script>
+<!-- /Yandex.Direct -->
+</td>
+<!-- {{queries}} -->
+<!-- {{total_sql}} -->
+{% endblock %}

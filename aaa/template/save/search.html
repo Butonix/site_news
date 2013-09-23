@@ -1,0 +1,99 @@
+{% extends 'index.html'%}
+
+{% block meta %}
+<title>MK.MK.UA - Поиск</title>
+<meta name="keywords" content="Новости, Николаев" />
+<meta name="description" content="Николаевская информационно-аналитическая интернет-газета" />
+<link href="/static/styles/datePicker.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="/static/scripts/jquery-1.2.3.min.js"></script>
+<script type="text/javascript" src="/static/scripts/date.js"></script>
+<script type="text/javascript" src="/static/scripts/jquery.datePicker.js"></script>
+<script type="text/javascript">
+$(function(){
+	$('#id_date_from').datePicker({startDate:'01/01/1996'});
+    $('#id_date_to').datePicker({startDate:'01/01/1996'});
+});
+</script>
+{% endblock %}
+
+{% block content %}
+<td id="content_block_left">
+    <h2>Расширенный поиск</h2>
+    <form action="/search/" method="GET">
+        <table class="user_comment">
+            <tr>
+                <td class="user_comment_top"><img src="/static/images/corner_01.gif" alt="" /></td>
+            </tr>
+            <tr>
+                <td>
+                    <table>
+                        <tr>
+                            <td>{{form.query}}</td>
+                            <td width="70"><input class="search_button" name="search_button" type="submit" value="Найти" /></td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <table>
+                        <tr>
+                            <td width="9" height="30"><img src="/static/images/spacer.gif" alt="" /></td>
+                            <td class="lable_category" width="50">Рубрика</td>
+                            <td width="80">
+                                {{form.rubric}}
+                            </td>
+                            <td class="lable_category" width="34">Автор</td>
+                            <td width="80">
+                                {{form.author}}
+                            </td>
+                            <td class="lable_category" width="12">C</td>
+                            <td width="95">
+                                {{form.date_from}}
+                            </td>
+                            <td class="lable_category" width="19">По</td>
+                            <td>
+                                {{form.date_to}}
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+            <tr>
+                <td class="user_comment_bottom"><img src="/static/images/corner_03.gif" alt="" /></td>
+            </tr>
+        </table>
+    </form>
+    {% if not pager.object_list|length %}
+    <div class="main_news"><p class="search_news">По вашему запросу мы абсолютно, ну совсем ничего, не смогли найти.</p></div>
+    {% else %}
+    <div class="main_news"><p class="search_news">По вашему запросу найдено новостей: <strong>{{pager.paginator.count}}</strong></p></div>
+    {% endif%}
+
+    {% for news in pager.object_list %}
+    <div class="main_news">
+        <p class="razdel search_news_name"><span class="date">{{news.pub_date|date:"d.m H:i"}}</span><strong><a href="{{news.get_absolute_url}}">{{news.title}}</a></strong></p>
+        <p class="search_news"><a href="{{news.get_absolute_url}}">{{news.text_middle}}</a></p>
+        <p class="search_news">
+            {% if not news.external_author %}
+            <u>Автор: {{news.author.get_full_name}}</u>
+            {% else %}
+            <u>{{news.external_author}}</u>
+            {% endif %}
+        </p>
+    </div>
+    {% endfor %}
+
+    {% ifnotequal pager.paginator.num_pages 1 %}
+    <div class="search_main_news">
+        {% for num in pager.paginator.page_range %}
+            {% ifequal pager.number num %}
+                {{num}} &nbsp;
+            {% else %}
+                <a href="/search/?page={{num}}&author={{form.cleaned_data.author.id}}&rubric={{form.cleaned_data.rubric.id}}&query={{form.cleaned_data.query}}&date_from={{form.cleaned_data.date_from|date:"d/m/Y"}}&date_to={{form.cleaned_data.date_to|date:"d/m/Y"}}">{{num}}</a> &nbsp;
+            {% endifequal %}
+        {% endfor %}
+     </div>
+    {% endifnotequal %}
+</td>
+{% endblock %}

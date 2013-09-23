@@ -1,0 +1,26 @@
+{% extends 'index.html' %}
+
+{% block meta %}
+<title>MK.MK.UA - {{rubric}}</title>
+<meta name="keywords" content="рубрика, {{rubric}}" />
+<meta name="description" content="рубрика {{rubric}}" />
+{% endblock %}
+
+{% block content %}
+<td id="content_block_left">
+    {% for report in reports %}
+     <div class="main_news">
+        <p class="image"><a href="{{report.get_absolute_url}}"><img src="{{report.thumb_big.url}}" alt="" /></a></p>
+        <div class="text">
+            <p>
+                <span class="date">{{report.pub_date|date:"d.m H:i"}}</span>
+                <span class="comment"><strong class="people">{{report.view_count}}</strong><strong class="chat">{{report.comment_count}}</strong></span>
+            </p>
+            <p class="news_name"><a href="{{report.get_absolute_url}}">{{report.title}}</a></p>
+            <p class="news_text"><a href="{{report.get_absolute_url}}">{{report.text}}</a></p>
+        </div>
+    </div>
+    {% endfor %}
+
+</td>
+{% endblock %}

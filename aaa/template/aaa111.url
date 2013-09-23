@@ -1,0 +1,7 @@
+				<ul>
+					{% ifequal page_url '/' %}<li><span><a href="/">Главное</a></span></li>{% else %}<li><a href="/">Главное</a></li>{% endifequal %}
+			{% for rubric in rubrics %}
+			{% ifequal rubric.get_absolute_url page_url %}<li><span><a href="{{rubric.get_absolute_url}}">{{rubric.name|capfirst}}</a></span></li>{% else %}<li><a href="{{rubric.get_absolute_url}}">{{rubric.name|capfirst}}</a></li>{% endifequal %}
+			{% endfor %}
+			{% ifequal page_url '/playbill/' %}<li><span><a href="/playbill/">Афиша</a></span></li>{% else %}<li><a href="/playbill/">Афиша</a></li>{% endifequal %}
+				</ul>

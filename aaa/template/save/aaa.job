@@ -1,0 +1,30 @@
+<!-- Job.Ukr.Net -->
+<style>
+.job-block {background:#eeeeee url(http://informers.ukr.net/job/sim/jobnewimg/bottom-bg.gif) repeat-x bottom;border:1px solid #c9c9c9;border-bottom:1px solid #c9c9c9;margin:10px auto;}
+.job-block .job-ttl {background:url(http://informers.ukr.net/job/sim/jobnewimg/ttl-bg.gif) repeat-x top;position:relative;height:38px;padding-left:10px;border-bottom:1px solid #c9c9c9;text-align:left;}
+.job-block .job-ttl a {font-family:Tahoma;font-size:11px;text-transform:uppercase;font-weight:bold;color:#000;text-decoration:none; position:relative;top:11px;}
+.job-logo-link {position:absolute;top:8px;right:8px;width:103px;height:22px;}
+.job-logo-link a {display:block;width:103px;height:22px;_background:none;_filter:progid:DXImageTransform.Microsoft.AlphaImageLoader (src='http://informers.ukr.net/job/sim/jobnewimg/job-logo-medium.png',sizingMethod='scale');cursor:pointer;position:static!important;}
+.job-logo-link img {_display:none;border:none;}
+.job-block .informer-block {padding:0px 3px 3px 3px;}
+#jobukrnet {}
+#jobukrnet ul {overflow:hidden;zoom:1;list-style:none;margin:0;padding:0;background:#FFF;}
+#jobukrnet li {border-bottom:1px solid #e3e3e3;list-style:none;padding:4px 0;margin-left:5px;margin-right:5px;margin-bottom:-1px; overflow:hidden;zoom:1;}
+#jobukrnet a {font-family:Arial;font-size:12px;font-weight:bold;color:#000;display:block;float:left;margin-left:4px;text-decoration:none;}
+#jobukrnet span {font-family:Arial;font-size:12px;font-weight:bold;color:#BD1A2B;display:block;float:right;margin-right:5px;}
+#jobukrnet .bottom-link-1 {padding:0!important;margin-top:5px!important;margin-left:3px;}
+#jobukrnet .bottom-link-2 {padding:0!important;margin-top:3px;margin-left:3px;}
+#jobukrnet .bottom-link-1 a, #jobukrnet .bottom-link-2 a {font-family:Arial;font-size:12px;font-weight:bold;color:#000;float:none!important;display:block;background:url(http://informers.ukr.net/job/sim/jobnewimg/bottom-links/bottom-but-bg-mkmk.gif) no-repeat 0 0;margin:0;padding:4px 21px 5px 11px;}
+#jobsearchform {background:#f8f8f8 url(http://informers.ukr.net/job/sim/jobnewimg/search-block-bg.gif) repeat-x top;margin-bottom:5px!important;padding:5px 7px;border-bottom:1px solid #cacaca;margin-left:-3px;margin-right:-3px;}
+#jobsearchform input {background:#FFF;height:18px!important;border:1px solid #8c8c8c;width:88%!important;}
+#jobsearchform .searcbut {width:21px!important;height:20px!important;font-size:0;background:url(http://informers.ukr.net/job/sim/jobnewimg/bottom-links/search-but-mkmk.gif) no-repeat 0 0;border:1px solid #99968f;cursor:pointer;}
+#jobsearchform select {}
+</style>
+<div class="job-block">
+	<noindex><div class="job-ttl"><a href="http://job.ukr.net/" target="_blank" rel="nofollow">Трудоустройство</a><div class="job-logo-link"><a href="http://job.ukr.net/" target="_blank" rel="nofollow"><img src="http://informers.ukr.net/job/sim/jobnewimg/job-logo-medium.png" width="103" height="22" /></a></div></div>
+	<div class="informer-block">
+		<div id="jobukrnet">Загрузка...</div>
+		<script language="javascript" src="http://informers.ukr.net/job/js_search.php?reg=14&c=10&m=2&h&limit=24&search" charset="windows-1251"></script>
+	</div></noindex>
+</div>
+<!-- Job.Ukr.Net -->

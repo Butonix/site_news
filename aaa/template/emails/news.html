@@ -1,0 +1,4 @@
+{% for selected in subscribe.selected.all %}
+[{{selected.news.pub_date|date:"d.m.Y H:i"}}] <a href="http://mk.mk.ua{{selected.news.get_absolute_url}}">{{selected.news.title}}</a><br>
+{{selected.news.text_middle}}<br><br>
+{% endfor %}

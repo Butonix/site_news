@@ -1,0 +1,38 @@
+{%extends 'index.html'%}
+{% block meta %}
+<title>MK.MK.UA - {{rubric|capfirst}}</title>
+<meta name="keywords" content="{{rubric.keywords}}" />
+<meta name="description" content="{{rubric.description}}" />
+{% endblock %}
+{% block content %}
+<td id="content_block_left">
+    {% for news in news %}
+    {% if forloop.first %}
+    <div class="main_news">
+	<h1><a href="{{news.get_absolute_url}}">{{news.title}}</a></h1>
+	<p class="image"><a href="{{news.get_absolute_url}}"><img src="/static/{{news.thumb_big}}" width="197" height="132" alt="" /></a></p>
+	<div class="text">
+		<p>
+			<span class="date">{{news.pub_date|date:"d.m H:i"}}</span>
+			<span class="comment"><strong class="people">{{news.views_count}}</strong><strong class="chat">{{news.comment_count}}</strong></span>
+		</p>
+	    <p class="news_text"><a href="{{news.get_absolute_url}}">{{news.text_first_locked}}</a></p>
+	</div>
+    </div>
+    {% else %}
+    <div class="main_news">
+	<p class="image"><a href="{{news.get_absolute_url}}"><img src="/static/{{news.thumb_middle}}" width="88" height="65" alt="" /></a></p>
+	<div class="text">
+	    <p>
+		<span class="date">{{news.pub_date|date:"d.m H:i"}}</span>
+		<span class="comment"><strong class="people">{{news.views_count}}</strong><strong class="chat">{{news.comment_count}}</strong></span>
+	    </p>
+            <p class="news_name"><a href="{{news.get_absolute_url}}">{{news.title}}</a></p>
+            <p class="news_text"><a href="{{news.get_absolute_url}}">{{news.text_middle}}</a></p>
+	</div>
+    </div>
+    {% endif %}
+    {% endfor %}
+    <p class="vse_stati_razdela"><a href="/search/?rubric={{rubric.id}}">Остальные новости раздела</a></p>
+</td>
+{% endblock %}

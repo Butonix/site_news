@@ -1,0 +1,50 @@
+{% extends 'index.html'%}
+
+{% block content %}
+<td id="content_block_left">
+    <h1>Подписка на новости</h1>
+    {% if not success %}
+    <form action="/subscribe/" method="POST">
+        <table id="send_comment">
+        	<tr>
+                <td></td>
+                <td>{{form.email.errors}}{{form.non_field_errors}}</td>
+            </tr>
+            <tr>
+                <td class="td_name">{{form.email.label}}</td>
+                <td class="input_name" width="100%">{{form.email}}</td>
+            <tr>
+            <tr>
+                <td></td>
+                <td>{{form.action.errors}}</td>
+            </tr>
+            <tr>
+                <td class="td_name">{{form.action.label}}</td>
+                <td class="input_name" width="100%">{{form.action}}</td>
+            </tr>
+            <tr>
+                <td></td>
+                <td><input class="button_comment" name="send" type="submit" value="Отправить" /></td>
+            </tr>
+        </table>
+    </form>
+    {% else %}
+
+    {% ifequal success '1' %}
+    На ваш адрес было выслано письмо для проверки введенного емейла.<br/>
+    Для того чтобы получать рассылку вам необходимо зайти по ссылке указанной в письме.
+    {% endifequal%}
+
+    {% ifequal success '2' %}
+    Спасибо, вы успешно подписаны на рассылку новостей сайта MK.MK.UA.<br/>
+    Помните, вы всегда можете отписаться от рассылки <a href="/subscribe/">на этой странице</a>
+    {% endifequal%}
+
+    {% ifequal success '3' %}
+    Ваш адрес был успешно проверен, вы больше не будете получать новости с сайта MK.MK.UA.<br/>
+    Помните, вы всегда можете подписаться на рассылку <a href="/subscribe/">на этой странице</a>
+    {% endifequal%}
+
+    {% endif %}
+</td>
+{% endblock %}

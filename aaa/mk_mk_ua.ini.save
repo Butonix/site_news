@@ -1,0 +1,28 @@
+[uwsgi]
+#processes = 4
+enable-threads = 1
+workers = 4
+#threads = 8
+master = 1
+max-requests = 1000
+socket = 127.0.0.1:10001
+#uid = mk_mk_ua
+#gid = web
+post-buffering = 8192
+virtualenv = /usr/www/envs/mk_mk_ua
+chdir = /usr/www/projs/mk_mk_ua
+pythonpath = ..
+#mountpoint = /
+#module = mk_mk_ua.django_wsgi.wsgi
+env = DJANGO_SETTINGS_MODULE=mk_mk_ua.settings
+env = PYTHON_EGG_CACHE=/usr/www/envs/mk_mk_ua
+pidfile = /var/run/uwsgi/mk_mk_ua.10001.pid
+close-on-exec = 1
+vacuum = 1
+module = django.core.handlers.wsgi:WSGIHandler()
+file-serve-mode = x-accel-redirect
+daemonize = /var/log/uwsgi/mk_mk_ua.10001.log
+buffer-size = 65536
+#touch-reload = /usr/www/mk_mk_ua.r
+harakiri=3600
+#
