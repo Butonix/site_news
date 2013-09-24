@@ -7,7 +7,7 @@ import sys
 ROOT = os.path.dirname(__file__)
 #sys.path.insert(0, os.path.join(ROOT, 'django'))
 sys.path.insert(0, os.path.join(ROOT, 'apps'))
-sys.path.insert(1, os.path.join(ROOT, 'compat'))
+sys.path.insert(1, os.path.join(ROOT, '../Compat'))
 #sys.path.insert(3, ROOT)
 
 DEBUG = False
@@ -29,7 +29,6 @@ ALLOWED_HOSTS = [
     '.mk.mk.ua', # Allow domain and subdomains
     '.mk.mk.ua.', # Also allow FQDN and subdomains
 ]
-
 
 DATABASES = {
     'default': {
@@ -80,7 +79,7 @@ MEDIA_ROOT = '/usr/www/media/mk_mk_ua'
 # URL that handles the media served from MEDIA_ROOT. Make sure to use a
 # trailing slash.
 # Examples: "http://media.lawrence.com/media/", "http://example.com/media/"
-MEDIA_URL = '/media/' #
+MEDIA_URL = '/media/'
 
 # Absolute path to the directory static files should be collected to.
 # Don't put anything in this directory yourself; store your static files
@@ -109,7 +108,7 @@ STATICFILES_DIRS = (
 STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.FileSystemFinder',
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
-#    'django.contrib.staticfiles.finders.DefaultStorageFinder',
+    # 'django.contrib.staticfiles.finders.DefaultStorageFinder',
 )
 
 # Make this unique, and don't share it with anybody.
