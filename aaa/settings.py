@@ -169,7 +169,7 @@ ROOT_URLCONF = 'urls'
 
 TEMPLATE_DIRS = (
     '/usr/www/projs/mk_mk_ua/template',
-#    os.path.join(ROOT, 'template'),
+    # os.path.join(ROOT, 'template'),
     # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
@@ -218,7 +218,7 @@ INSTALLED_APPS = (
     # Uncomment the next line to enable admin documentation:
     'django.contrib.admindocs',
     'debug_toolbar',
-#    'static_sitemaps',
+    #    'static_sitemaps',
 )
 
 INTERNAL_IPS = ('127.0.0.1', '192.168.3.30', '193.33.237.146', '217.77.210.70', '46.33.244.34', )
@@ -258,9 +258,10 @@ DEBUG_TOOLBAR_PANELS = (
 'debug_toolbar.panels.signals.SignalDebugPanel',
 'debug_toolbar.panels.logger.LoggingPanel',
 )
+
 DEBUG_TOOLBAR_CONFIG = {
-'EXCLUDE_URLS': ('/admin/',), # не работает, но в разработке есть...
-'INTERCEPT_REDIRECTS': False,
+    'EXCLUDE_URLS': ('/admin/',), # не работает, но в разработке есть...
+    'INTERCEPT_REDIRECTS': False,
 }
 
 LOGGING = {
