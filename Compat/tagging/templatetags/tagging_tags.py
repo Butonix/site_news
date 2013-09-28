@@ -2,10 +2,11 @@ from django.db.models import get_model
 from django.template import Library, Node, TemplateSyntaxError, Variable, resolve_variable
 from django.utils.translation import ugettext as _
 
-from tagging.models import Tag, TaggedItem
-from tagging.utils import LINEAR, LOGARITHMIC
+from Compat.tagging.models import Tag, TaggedItem
+from Compat.tagging.utils import LINEAR, LOGARITHMIC
 
 register = Library()
+
 
 class TagsForModelNode(Node):
     def __init__(self, model, context_var, counts):

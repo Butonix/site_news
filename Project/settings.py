@@ -43,7 +43,7 @@ ADMINS = (
 
 MANAGERS = ADMINS
 
-SERVER = os.path.isfile(path('keksik_com_ua.server.key', ), )
+SERVER = os.path.isfile(path('mk_mk_ua.server.key', ), )
 
 if SERVER:
     DATABASES = {
@@ -186,7 +186,7 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     # Uncomment the next line for simple clickjacking protection:
-    # 'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'django.middleware.clickjacking.XFrameOptionsMiddleware',
 )
 
 ROOT_URLCONF = 'Project.urls'
@@ -194,8 +194,7 @@ ROOT_URLCONF = 'Project.urls'
 # Python dotted path to the WSGI application used by Django's runserver.
 WSGI_APPLICATION = 'Project.wsgi.application'
 
-import os
-TEMPLATE_DIRS = (os.path.join(os.path.dirname(__file__), '../', 'templates').replace('\\','/'),)
+TEMPLATE_DIRS = path('templates')
 
 INSTALLED_APPS = (
     'django.contrib.auth',
@@ -208,7 +207,7 @@ INSTALLED_APPS = (
     'django.contrib.admin',
     # Uncomment the next line to enable admin documentation:
     # 'django.contrib.admindocs',
-    'mk.mk.ua.Application',
+    'Apps.news',
 )
 
 # A sample logging configuration. The only tangible logging

@@ -3,17 +3,17 @@ from django.core.paginator import Paginator, InvalidPage
 from django.http import Http404, HttpResponseRedirect
 
 from models import Rubric, News, Photo
-from decorators import render_to
-from tagging.models import TaggedItem
+from Compat.decorators import render_to
+from Compat.tagging.models import TaggedItem
 from Apps.news.forms import CommentFormReport, CommentFormNews, SearchForm, ContactForm
-from subscribe.forms import SubscribeForm
-from subscribe.models import Member, Activation
-from other.models import Banner, Announce
+from Apps.subscribe.forms import SubscribeForm
+from Apps.subscribe.models import Member, Activation
+from Apps.other.models import Banner, Announce
 
 #from gismeteo.models import Forecast
-from photoreport.models import Report 
-from photoreport.models import Photo as ReportPhoto
-from playbill.models import Place, Type, Event
+from Apps.photoreport.models import Report
+from Apps.photoreport.models import Photo as ReportPhoto
+from Apps.playbill.models import Place, Type, Event
 from datetime import date, timedelta
 
 

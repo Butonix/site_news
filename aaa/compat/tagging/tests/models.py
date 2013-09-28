@@ -1,10 +1,12 @@
 from django.db import models
 
-from tagging.fields import TagField
+from Compat.tagging.fields import TagField
+
 
 class Perch(models.Model):
     size = models.IntegerField()
     smelly = models.BooleanField(default=True)
+
 
 class Parrot(models.Model):
     state = models.CharField(max_length=50)
@@ -15,6 +17,7 @@ class Parrot(models.Model):
 
     class Meta:
         ordering = ['state']
+
 
 class Link(models.Model):
     name = models.CharField(max_length=50)

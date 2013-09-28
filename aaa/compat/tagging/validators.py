@@ -6,8 +6,9 @@ until the ``newforms-admin`` branch lands in trunk.
 from django import forms
 from django.utils.translation import ugettext as _
 
-from tagging import settings
-from tagging.utils import parse_tag_input
+from Compat.tagging import settings
+from Compat.tagging.utils import parse_tag_input
+
 
 def is_tag_list(value):
     """
@@ -18,6 +19,7 @@ def is_tag_list(value):
             raise forms.ValidationError(
                 _('Each tag may be no more than %s characters long.') % settings.MAX_TAG_LENGTH)
     return value
+
 
 def is_tag(value):
     """

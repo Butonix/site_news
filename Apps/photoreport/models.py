@@ -1,7 +1,7 @@
 ﻿from django.db import models
 #from django.contrib import admin
-from tagging.fields import TagField
-from thumbnail.fields import ThumbField
+from Compat.tagging.fields import TagField
+from Compat.thumbnail.fields import ThumbField
 
 
 class Report(models.Model):    

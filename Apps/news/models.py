@@ -2,12 +2,12 @@
 
 from django.db import models
 from django.contrib.auth.models import User
-from thumbnail.fields import ThumbField
+from Compat.thumbnail.fields import ThumbField
 from Apps.news.managers import Manager
-from tagging.fields import TagField
+from Compat.tagging.fields import TagField
+
 
 # Модель рубрики
-
 class Rubric(models.Model):
     name = models.CharField(u'Рубрика', max_length=255)
     date = models.DateTimeField(auto_now=True)
@@ -25,11 +25,11 @@ class Rubric(models.Model):
         verbose_name = "рубрика"
         verbose_name_plural = "рубрики"
 
+
 # Модель новости
 class News(models.Model):
 
     # Основные свойства новости
-
     title = models.CharField(u'Заголовок', max_length=255)
     author = models.ForeignKey(User, related_name='news', verbose_name='Автор')
     rubric = models.ForeignKey(Rubric, related_name='news', verbose_name='Рубрика')
@@ -49,7 +49,7 @@ class News(models.Model):
     # Абсолютный путь к дополнительной фотографии
     def set_path_photo(self, filename, ):
         if self.pub_date:
-            return 'photos/news/%s/%s' % ( self.pub_date.strftime('%Y/%m/%d'), filename, )
+            return 'photos/news/%s/%s' % (self.pub_date.strftime('%Y/%m/%d'), filename, )
         else:
             from datetime import datetime
             return 'photos/news/%s/%s' % (datetime.now().strftime('%Y/%m/%d'), filename, )
@@ -60,7 +60,8 @@ class News(models.Model):
     #thumb_small = ThumbField(source='photo', img_size=[38,38], upload_to=set_path_photo, )
 
     photo = models.ImageField('Фото', upload_to=set_path_photo, blank=False, null=False, )
-    thumb_main = ThumbField(source='photo', size=[298,198], upload_to=set_path_photo, ) # upload_to='photos/news/%Y/%m/%d', ) # upload_to=set_path_photo
+    thumb_main = ThumbField(source='photo', size=[298,198], upload_to=set_path_photo, )
+    #  upload_to='photos/news/%Y/%m/%d', )
     thumb_big = ThumbField(source='photo', size=[197,132], upload_to=set_path_photo, )
     thumb_middle = ThumbField(source='photo', size=[88,65], upload_to=set_path_photo, )
     thumb_small = ThumbField(source='photo', size=[38,38], upload_to=set_path_photo, )
@@ -72,7 +73,8 @@ class News(models.Model):
     published = models.BooleanField(u'Опубликована', default=0)
 #    changed = models.BooleanField(verbose_name=u'Флаг изменений', default=False, )
     add_date = models.DateTimeField(u'Дата добавления', auto_now_add=True)
-    show_in_newslist = models.BooleanField(u'В ленте', default=1, help_text='Новость будет отображаться в ленте новостей')
+    show_in_newslist = models.BooleanField(u'В ленте', default=1,
+                                           help_text='Новость будет отображаться в ленте новостей')
     bold_title = models.BooleanField(u'Выделять заголовок', default=0, help_text='Новость будет выделена жирным')
     pub_date = models.DateTimeField(u'Дата публикации', null=True, blank=True)
     tags = TagField('Теги новости', blank=True)
@@ -122,7 +124,7 @@ class News(models.Model):
             try:
                 counters = Counters.objects.get(news=self, )
             except Counters.DoesNotExist:
-                Counter.objects.create(news=self, )
+                Counters.objects.create(news=self, )
                 return 0
             # store item in cache for next time
             else:
@@ -277,10 +279,21 @@ class News(models.Model):
 #        verbose_name = u'флаг изменения'
 #        verbose_name_plural = u'флаги изменений'
 
+
 class Counters(models.Model):
-    news = models.ForeignKey(News, verbose_name='Новость', related_name='model_counters', blank=False, null=False, )
-    viewers = models.PositiveSmallIntegerField(verbose_name=u'Количество просмотров', blank=True, null=True, default=0, )
-    comments = models.PositiveSmallIntegerField(verbose_name=u'Количество комментариев', blank=True, null=True, default=0, )
+    news = models.ForeignKey(News,
+                             verbose_name='Новость',
+                             related_name='model_counters',
+                             blank=False,
+                             null=False, )
+    viewers = models.PositiveSmallIntegerField(verbose_name=u'Количество просмотров',
+                                               blank=True,
+                                               null=True,
+                                               default=0, )
+    comments = models.PositiveSmallIntegerField(verbose_name=u'Количество комментариев',
+                                                blank=True,
+                                                null=True,
+                                                default=0, )
 
     # Менеджеры
     objects = Manager()
@@ -295,18 +308,20 @@ class Counters(models.Model):
         verbose_name = u'количество просмотров'
         verbose_name_plural = u'количество просмотров'
 
+
 # Модель доподнительных фотографий для новости
 class Photo(models.Model):
     news = models.ForeignKey(News, related_name='photos', verbose_name='Новость')
     sign = models.CharField(u'Подпись', max_length=255)
+
     def set_path_photo(self, filename, ):
         if self.news.pub_date:
             return 'photos/extra/%s/%s' % ( self.news.pub_date.strftime('%Y/%m/%d'), filename, )
         else:
 #            from datetime import datetime
-            return 'photos/extra/%s/%s' % (self.news.add_date.strftime('%Y/%m/%d'), filename, ) #datetime.now()
-    image = models.ImageField(u'Фото', upload_to=set_path_photo, blank=False, null=False, ) #'photos/extra/%Y/%m/%d'
-    thumb = ThumbField(source='image', size=[88,65], upload_to=set_path_photo, )
+            return 'photos/extra/%s/%s' % (self.news.add_date.strftime('%Y/%m/%d'), filename, )  # datetime.now()
+    image = models.ImageField(u'Фото', upload_to=set_path_photo, blank=False, null=False, )  # 'photos/extra/%Y/%m/%d'
+    thumb = ThumbField(source='image', size=[88, 65, ], upload_to=set_path_photo, )
 
 #    def generate_thumb_name(self, original, field_name, ):
 #        import os
@@ -330,13 +345,14 @@ class Photo(models.Model):
         verbose_name = u'фотографии'
         verbose_name_plural = u'дополнительные фотографии'
 
-# Модель комментарив пользователей        
+
+# Модель комментарив пользователей
 class Comment(models.Model):
     news = models.ForeignKey(News, related_name='model_comments', verbose_name='Новость', )
-    email = models.EmailField(u'Email', blank=True)
-    user_name = models.CharField(u'Имя', max_length=100)
-    pub_date = models.DateTimeField(u'Дата добавления', auto_now_add=True)
-    text = models.TextField('Текст')
+    email = models.EmailField(u'Email', blank=True, )
+    user_name = models.CharField(u'Имя', max_length=100, )
+    pub_date = models.DateTimeField(u'Дата добавления', auto_now_add=True, )
+    text = models.TextField('Текст', )
 
     def __unicode__(self):
         return self.email

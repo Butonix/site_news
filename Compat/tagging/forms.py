@@ -4,10 +4,11 @@ Tagging components for Django's ``newforms`` form library.
 from django import forms
 from django.utils.translation import ugettext as _
 
-from tagging import settings
-from tagging.models import Tag
-from tagging.validators import is_tag, is_tag_list
-from tagging.utils import parse_tag_input
+from Compat.tagging import settings
+from Compat.tagging.models import Tag
+from Compat.tagging.validators import is_tag, is_tag_list
+from Compat.tagging.utils import parse_tag_input
+
 
 class AdminTagForm(forms.ModelForm):
     class Meta:

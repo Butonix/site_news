@@ -5,11 +5,12 @@ from django.http import Http404
 from django.utils.translation import ugettext as _
 from django.views.generic.list_detail import object_list
 
-from tagging.models import Tag, TaggedItem
-from tagging.utils import get_tag, get_queryset_and_model
+from Compat.tagging.models import Tag, TaggedItem
+from Compat.tagging.utils import get_tag, get_queryset_and_model
+
 
 def tagged_object_list(request, queryset_or_model=None, tag=None,
-        related_tags=False, related_tag_counts=True, **kwargs):
+                       related_tags=False, related_tag_counts=True, **kwargs):
     """
     A thin wrapper around
     ``django.views.generic.list_detail.object_list`` which creates a
